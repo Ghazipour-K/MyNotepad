@@ -117,7 +117,7 @@ namespace MyNotepad
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (saveFileDialog.FilterIndex == 0 || saveFileDialog.FilterIndex == 2)
+                    if (saveFileDialog.FilterIndex == 1 || saveFileDialog.FilterIndex == 3)
                         File.WriteAllText(saveFileDialog.FileName, noteTextBox.Text);
                     else
                         SaveTextAsPDF(saveFileDialog.FileName);
