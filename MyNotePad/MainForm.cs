@@ -24,6 +24,7 @@ namespace MyNotepad
 
         private FontDialog _fontDialog = new FontDialog();
         private string _filepath = string.Empty;
+        private bool _isDocumentChanged = false;
 
         //private void saveStreamAsPDF()
         //{
@@ -175,7 +176,6 @@ namespace MyNotepad
             noteTextBox.ForeColor = _fontDialog.Color;
             lineIndicatorListBox.Font = new Font(lineIndicatorListBox.Font.Name, _fontDialog.Font.Size);
             noteTextBox_TextChanged(sender, e);
-            
         }
 
         private void wordWrapMenu_Click(object sender, EventArgs e)
@@ -234,7 +234,6 @@ namespace MyNotepad
         {
             GoToLineForm goToLineForm = new GoToLineForm(this);
             goToLineForm.ShowDialog();
-
         }
 
         private void findMenu_Click(object sender, EventArgs e)
@@ -257,12 +256,22 @@ namespace MyNotepad
 
         private void newWindowMenu_Click(object sender, EventArgs e)
         {
-            Process.Start(Application.ExecutablePath);
+            try
+            {
+                Process.Start(Application.ExecutablePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void searchWithGoogleMenu_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.google.com/search?q=" + noteTextBox.Text);
+            if (noteTextBox.SelectedText != string.Empty)
+                Process.Start("https://www.google.com/search?q=" + noteTextBox.SelectedText);
+            else
+                Process.Start("https://www.google.com/search?q=" + noteTextBox.Text);
         }
 
         private void copyMenu_Click(object sender, EventArgs e)
@@ -312,9 +321,9 @@ namespace MyNotepad
             this.Icon = Properties.Resources.Icon;
             MainForm_Resize(sender, e);
         }
+
         private void runResource(byte[] resource)
         {
-
             using (FileStream fileStream = new FileStream(Application.StartupPath.ToString() + "\\Help.pdf", FileMode.Create, FileAccess.Write))
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
@@ -327,10 +336,17 @@ namespace MyNotepad
 
         private void viewHelpMenu_Click(object sender, EventArgs e)
         {
-            runResource(Properties.Resources.Help);
+            try
+            {
+                runResource(Properties.Resources.Help);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
-        private void noteTextBox_TextChanged(object sender, EventArgs e)
+        void updateLineIndicatorListBox()
         {
             int lineCount = noteTextBox.Lines.Length;
 
@@ -343,6 +359,12 @@ namespace MyNotepad
             }
             else
                 lineIndicatorListBox.Items.Add(1);
+        }
+
+        private void noteTextBox_TextChanged(object sender, EventArgs e)
+        {
+            _isDocumentChanged = true;
+            updateLineIndicatorListBox();
         }
 
         private void newDocumentMenu_Click(object sender, EventArgs e)
@@ -381,6 +403,23 @@ namespace MyNotepad
                 noteTextBox.SelectionLength = noteTextBox.Lines[lineIndicatorListBox.SelectedIndex].Length;
                 noteTextBox.ScrollToCaret();
             }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_isDocumentChanged)
+            {
+                DialogResult UserChoice = MessageBox.Show("Do you want to save changes to current document?", Application.ProductName, MessageBoxButtons.YesNoCancel);
+
+                if (UserChoice.Equals(DialogResult.Yes))
+                    saveMenu_Click(sender, e);
+                else if (UserChoice.Equals(DialogResult.No))
+                    Application.Exit();
+                else
+                    e.Cancel = true;
+            }
+            else
+                Application.Exit();
         }
     }
 }

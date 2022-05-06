@@ -452,6 +452,7 @@ namespace MyNotepad
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.Text = "Notepad";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
