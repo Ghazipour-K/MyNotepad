@@ -70,8 +70,6 @@ namespace MyNotepad
 
         private void SaveTextAsPDF(string fileName)
         {
-            try
-            {
                 string line = null;
                 int yPoint = 0;
 
@@ -93,11 +91,6 @@ namespace MyNotepad
 
                 pdf.Save(fileName);
                 Process.Start(fileName);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
         }
 
         public MainForm()
@@ -108,20 +101,27 @@ namespace MyNotepad
 
         private void saveAsMenu_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            try
             {
-                saveFileDialog.Filter = "Text Files|*.txt|PDF Files|*.PDF|All Files|*.*";
-                saveFileDialog.DefaultExt = "txt";
-                saveFileDialog.AddExtension = true;
-                saveFileDialog.ValidateNames = true;
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
-                    if (saveFileDialog.FilterIndex == 1 || saveFileDialog.FilterIndex == 3)
-                        File.WriteAllText(saveFileDialog.FileName, noteTextBox.Text);
-                    else
-                        SaveTextAsPDF(saveFileDialog.FileName);
+                    saveFileDialog.Filter = "Text Files|*.txt|PDF Files|*.PDF|All Files|*.*";
+                    saveFileDialog.DefaultExt = "txt";
+                    saveFileDialog.AddExtension = true;
+                    saveFileDialog.ValidateNames = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        if (saveFileDialog.FilterIndex == 1 || saveFileDialog.FilterIndex == 3)
+                            File.WriteAllText(saveFileDialog.FileName, noteTextBox.Text);
+                        else
+                            SaveTextAsPDF(saveFileDialog.FileName);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -134,18 +134,8 @@ namespace MyNotepad
         {
             if (_filepath == "")
             {
-                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-                {
-                    saveFileDialog.Filter = "Text Files|*.txt|All Files|*.*";
-                    saveFileDialog.DefaultExt = "txt";
-                    saveFileDialog.AddExtension = true;
-                    saveFileDialog.ValidateNames = true;
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                        File.WriteAllText(saveFileDialog.FileName, noteTextBox.Text);
-                }
+                saveAsMenu_Click(sender, e);
             }
-            else
-                File.WriteAllText(_filepath, noteTextBox.Text);
         }
 
         private void openMenu_Click(object sender, EventArgs e)
