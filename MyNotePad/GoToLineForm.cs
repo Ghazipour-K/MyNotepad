@@ -25,8 +25,6 @@ namespace MyNotepad
             this.Close();
         }
 
-        
-
         private void gotoLineButton_Click(object sender, EventArgs e)
         {
             if (int.TryParse(LineTextbox.Text, out _lineNumber))

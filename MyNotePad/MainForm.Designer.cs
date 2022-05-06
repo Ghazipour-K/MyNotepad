@@ -77,12 +77,11 @@ namespace MyNotepad
             // 
             // noteTextBox
             // 
-            this.noteTextBox.Dock = System.Windows.Forms.DockStyle.Right;
-            this.noteTextBox.Location = new System.Drawing.Point(20, 24);
+            this.noteTextBox.Location = new System.Drawing.Point(59, 24);
             this.noteTextBox.Multiline = true;
             this.noteTextBox.Name = "noteTextBox";
             this.noteTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.noteTextBox.Size = new System.Drawing.Size(946, 582);
+            this.noteTextBox.Size = new System.Drawing.Size(907, 582);
             this.noteTextBox.TabIndex = 0;
             this.noteTextBox.WordWrap = false;
             this.noteTextBox.TextChanged += new System.EventHandler(this.noteTextBox_TextChanged);
@@ -98,7 +97,7 @@ namespace MyNotepad
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.mainMenu.Size = new System.Drawing.Size(966, 24);
+            this.mainMenu.Size = new System.Drawing.Size(983, 24);
             this.mainMenu.TabIndex = 1;
             // 
             // fileMenu
@@ -436,14 +435,17 @@ namespace MyNotepad
             "1"});
             this.lineIndicatorListBox.Location = new System.Drawing.Point(0, 24);
             this.lineIndicatorListBox.Name = "lineIndicatorListBox";
-            this.lineIndicatorListBox.Size = new System.Drawing.Size(20, 582);
+            this.lineIndicatorListBox.Size = new System.Drawing.Size(53, 584);
             this.lineIndicatorListBox.TabIndex = 2;
+            this.lineIndicatorListBox.SelectedIndexChanged += new System.EventHandler(this.lineIndicatorListBox_SelectedIndexChanged);
+            this.lineIndicatorListBox.MouseEnter += new System.EventHandler(this.lineIndicatorListBox_MouseEnter);
+            this.lineIndicatorListBox.MouseLeave += new System.EventHandler(this.lineIndicatorListBox_MouseLeave);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(966, 606);
+            this.ClientSize = new System.Drawing.Size(983, 608);
             this.Controls.Add(this.lineIndicatorListBox);
             this.Controls.Add(this.noteTextBox);
             this.Controls.Add(this.mainMenu);
@@ -451,6 +453,8 @@ namespace MyNotepad
             this.Name = "MainForm";
             this.Text = "Notepad";
             this.Load += new System.EventHandler(this.Main_Load);
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.ResumeLayout(false);

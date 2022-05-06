@@ -173,6 +173,9 @@ namespace MyNotepad
             _fontDialog.ShowDialog();
             noteTextBox.Font = _fontDialog.Font;
             noteTextBox.ForeColor = _fontDialog.Color;
+            lineIndicatorListBox.Font = new Font(lineIndicatorListBox.Font.Name, _fontDialog.Font.Size);
+            noteTextBox_TextChanged(sender, e);
+            
         }
 
         private void wordWrapMenu_Click(object sender, EventArgs e)
@@ -254,7 +257,7 @@ namespace MyNotepad
 
         private void newWindowMenu_Click(object sender, EventArgs e)
         {
-            //Process.Start(Application.StartupPath + ".exe");
+            Process.Start(Application.ExecutablePath);
         }
 
         private void searchWithGoogleMenu_Click(object sender, EventArgs e)
@@ -307,6 +310,7 @@ namespace MyNotepad
         private void Main_Load(object sender, EventArgs e)
         {
             this.Icon = Properties.Resources.Icon;
+            MainForm_Resize(sender, e);
         }
         private void runResource(byte[] resource)
         {
@@ -343,7 +347,40 @@ namespace MyNotepad
 
         private void newDocumentMenu_Click(object sender, EventArgs e)
         {
+            //New document code here
+        }
 
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            noteTextBox.Height = lineIndicatorListBox.Height;
+            noteTextBox.Width = this.Width - lineIndicatorListBox.Width - 17;
+            noteTextBox.Left = lineIndicatorListBox.Left + lineIndicatorListBox.Width;
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            MainForm_Resize(sender, e);
+        }
+
+        private void lineIndicatorListBox_MouseEnter(object sender, EventArgs e)
+        {
+            lineIndicatorListBox.Cursor = Cursors.Hand;
+        }
+
+        private void lineIndicatorListBox_MouseLeave(object sender, EventArgs e)
+        {
+            lineIndicatorListBox.Cursor = Cursors.Arrow;
+        }
+
+        private void lineIndicatorListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            noteTextBox.HideSelection = false;
+            if (noteTextBox.Lines.Length > 0)
+            {
+                noteTextBox.SelectionStart = noteTextBox.GetFirstCharIndexFromLine(lineIndicatorListBox.SelectedIndex);
+                noteTextBox.SelectionLength = noteTextBox.Lines[lineIndicatorListBox.SelectedIndex].Length;
+                noteTextBox.ScrollToCaret();
+            }
         }
     }
 }
