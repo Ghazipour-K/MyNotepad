@@ -25,7 +25,7 @@ namespace MyNotepad
         private FontDialog _fontDialog = new FontDialog();
         private string _filepath = string.Empty;
         private bool _isDocumentChanged = false;
-
+        private string _documentTitle = "Untitled";
         //private void saveStreamAsPDF()
         //{
         //    try
@@ -207,9 +207,9 @@ namespace MyNotepad
 
         private void aboutNotepadMenu_Click(object sender, EventArgs e)
         {
-            using (About AboutForm = new About())
+            using (AboutForm aboutForm = new AboutForm())
             {
-                AboutForm.ShowDialog();
+                aboutForm.ShowDialog();
             }
         }
 
@@ -319,6 +319,7 @@ namespace MyNotepad
         private void Main_Load(object sender, EventArgs e)
         {
             this.Icon = Properties.Resources.Icon;
+            this.Text = _documentTitle + " - " + Application.ProductName;
             MainForm_Resize(sender, e);
         }
 
@@ -364,6 +365,7 @@ namespace MyNotepad
         private void noteTextBox_TextChanged(object sender, EventArgs e)
         {
             _isDocumentChanged = true;
+            this.Text = _documentTitle + "* - " + Application.ProductName;
             updateLineIndicatorListBox();
         }
 
