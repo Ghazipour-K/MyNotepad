@@ -168,10 +168,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ApplicationLogo.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Untitled-1.png" />
+    <None Include="Resources\ApplicationLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

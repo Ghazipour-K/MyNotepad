@@ -26,6 +26,7 @@ namespace MyNotepad
         private string _filepath = string.Empty;
         private bool _isDocumentChanged = false;
         private string _documentTitle = "Untitled";
+        private bool _isDocumentSaved = false;
         //private void saveStreamAsPDF()
         //{
         //    try
@@ -111,18 +112,22 @@ namespace MyNotepad
                     saveFileDialog.AddExtension = true;
                     saveFileDialog.ValidateNames = true;
 
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    if (saveFileDialog.ShowDialog().Equals(DialogResult.OK))
                     {
                         if (saveFileDialog.FilterIndex == 1 || saveFileDialog.FilterIndex == 3)
                             File.WriteAllText(saveFileDialog.FileName, noteTextBox.Text);
                         else
                             SaveTextAsPDF(saveFileDialog.FileName);
+                        _isDocumentSaved = true;
                     }
+                    else
+                        _isDocumentSaved = false;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                _isDocumentSaved = false;
             }
         }
 
@@ -414,14 +419,28 @@ namespace MyNotepad
                 DialogResult UserChoice = MessageBox.Show("Do you want to save changes to current document?", Application.ProductName, MessageBoxButtons.YesNoCancel);
 
                 if (UserChoice.Equals(DialogResult.Yes))
-                    saveMenu_Click(sender, e);
+                {
+                    e.Cancel = true;
+                    saveAsMenu_Click(sender, e);
+                    if (_isDocumentSaved)
+                    {
+                        e.Cancel = false;
+                        Application.Exit();
+                    }
+                }
                 else if (UserChoice.Equals(DialogResult.No))
+                {
+                    e.Cancel = false;
                     Application.Exit();
+                }
                 else
                     e.Cancel = true;
             }
             else
+            {
+                e.Cancel = false;
                 Application.Exit();
+            }
         }
     }
 }
