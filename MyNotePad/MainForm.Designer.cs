@@ -72,11 +72,13 @@ namespace MyNotepad
             this.separatorMenu3 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutNotepadMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.lineIndicatorListBox = new System.Windows.Forms.ListBox();
+            this.openURLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // noteTextBox
             // 
+            this.noteTextBox.AllowDrop = true;
             this.noteTextBox.Location = new System.Drawing.Point(59, 24);
             this.noteTextBox.Multiline = true;
             this.noteTextBox.Name = "noteTextBox";
@@ -106,6 +108,7 @@ namespace MyNotepad
             this.newDocumentMenu,
             this.newWindowMenu,
             this.openMenu,
+            this.openURLMenu,
             this.saveMenu,
             this.saveAsMenu,
             this.separatorLine1,
@@ -441,8 +444,17 @@ namespace MyNotepad
             this.lineIndicatorListBox.MouseEnter += new System.EventHandler(this.lineIndicatorListBox_MouseEnter);
             this.lineIndicatorListBox.MouseLeave += new System.EventHandler(this.lineIndicatorListBox_MouseLeave);
             // 
+            // openURLMenu
+            // 
+            this.openURLMenu.Name = "openURLMenu";
+            this.openURLMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.openURLMenu.Size = new System.Drawing.Size(220, 22);
+            this.openURLMenu.Text = "Open URL";
+            this.openURLMenu.Click += new System.EventHandler(this.openURLMenu_Click);
+            // 
             // MainForm
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(983, 608);
@@ -507,6 +519,7 @@ namespace MyNotepad
         public System.Windows.Forms.TextBox noteTextBox;
         private System.Windows.Forms.ToolStripMenuItem cutMenu;
         private System.Windows.Forms.ListBox lineIndicatorListBox;
+        private System.Windows.Forms.ToolStripMenuItem openURLMenu;
     }
 }
 

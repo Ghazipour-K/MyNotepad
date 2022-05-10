@@ -23,10 +23,11 @@ namespace MyNotepad
         private PageSetupDialog _pageSetupDialog = new PageSetupDialog();
 
         private FontDialog _fontDialog = new FontDialog();
-        private string _filepath = string.Empty;
+        private string _loadedFilePath = string.Empty;
         private bool _isDocumentChanged = false;
         private string _documentTitle = "Untitled";
         private bool _isDocumentSaved = false;
+        private bool _isExistingDocumentLoaded = false;
         //private void saveStreamAsPDF()
         //{
         //    try
@@ -138,9 +139,14 @@ namespace MyNotepad
 
         private void saveMenu_Click(object sender, EventArgs e)
         {
-            if (_filepath == "")
+            if (_loadedFilePath == "")
             {
                 saveAsMenu_Click(sender, e);
+            }
+            else
+            {
+                File.WriteAllText(_loadedFilePath, noteTextBox.Text);
+                this.Text = this.Text.Replace('*', ' ');
             }
         }
 
@@ -155,7 +161,11 @@ namespace MyNotepad
                     if (File.Exists(openFileDialog.FileName))
                     {
                         noteTextBox.Text = File.ReadAllText(openFileDialog.FileName);
-                        _filepath = openFileDialog.FileName;
+                        _isDocumentChanged = false;
+                        _isExistingDocumentLoaded = true;
+                        _documentTitle = openFileDialog.SafeFileName;
+                        this.Text = _documentTitle + " - " + Application.ProductName;
+                        _loadedFilePath = openFileDialog.FileName;
                     }
                 }
                 catch (Exception ex)
@@ -172,15 +182,18 @@ namespace MyNotepad
 
         private void fontMenu_Click(object sender, EventArgs e)
         {
-            _fontDialog.MinSize = 20;
+            _fontDialog.MinSize = 10;
             _fontDialog.ShowColor = true;
             _fontDialog.ShowEffects = true;
             _fontDialog.ShowApply = true;
-            _fontDialog.ShowDialog();
-            noteTextBox.Font = _fontDialog.Font;
-            noteTextBox.ForeColor = _fontDialog.Color;
-            lineIndicatorListBox.Font = new Font(lineIndicatorListBox.Font.Name, _fontDialog.Font.Size);
-            noteTextBox_TextChanged(sender, e);
+            if (_fontDialog.ShowDialog().Equals(DialogResult.OK))
+            {
+                noteTextBox.Font = _fontDialog.Font;
+                noteTextBox.ForeColor = _fontDialog.Color;
+                lineIndicatorListBox.Font = _fontDialog.Font;
+                //lineIndicatorListBox.Font = new Font(lineIndicatorListBox.Font.Name, _fontDialog.Font.Size);
+                //updateLineIndicatorListBox();
+            }
         }
 
         private void wordWrapMenu_Click(object sender, EventArgs e)
@@ -325,7 +338,41 @@ namespace MyNotepad
         {
             this.Icon = Properties.Resources.Icon;
             this.Text = _documentTitle + " - " + Application.ProductName;
+            noteTextBox.AllowDrop = true;
+            noteTextBox.DragDrop += NoteTextBox_DragDrop;
+            noteTextBox.DragOver += NoteTextBox_DragOver;
             MainForm_Resize(sender, e);
+        }
+
+        private void NoteTextBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void NoteTextBox_DragDrop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                var Data = e.Data.GetData(DataFormats.FileDrop);
+                if (Data != null)
+                {
+                    var FileNames = Data as string[];
+                    if (FileNames.Length > 0)
+                    {
+                        noteTextBox.Text = File.ReadAllText(FileNames[0]);
+                        _isDocumentChanged = false;
+                        string[] SplitedFilePath = FileNames[0].Split('\\');
+                        this.Text = FileNames[0].Split('\\')[SplitedFilePath.Length - 1];//Safe file name
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void runResource(byte[] resource)
@@ -441,6 +488,12 @@ namespace MyNotepad
                 e.Cancel = false;
                 Application.Exit();
             }
+        }
+
+        private void openURLMenu_Click(object sender, EventArgs e)
+        {
+            GetURLFrom getURLFrom = new GetURLFrom(this);
+            getURLFrom.Show();
         }
     }
 }

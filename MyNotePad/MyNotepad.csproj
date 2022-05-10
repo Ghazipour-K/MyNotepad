@@ -93,6 +93,12 @@
     <Compile Include="FindForm.Designer.cs">
       <DependentUpon>FindForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GetURLFrom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetURLFrom.Designer.cs">
+      <DependentUpon>GetURLFrom.cs</DependentUpon>
+    </Compile>
     <Compile Include="GoToLineForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +124,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FindForm.resx">
       <DependentUpon>FindForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetURLFrom.resx">
+      <DependentUpon>GetURLFrom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GoToLineForm.resx">
       <DependentUpon>GoToLineForm.cs</DependentUpon>
