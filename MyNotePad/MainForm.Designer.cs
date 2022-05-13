@@ -35,6 +35,7 @@ namespace MyNotepad
             this.newDocumentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newWindowMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.openMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.openURLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.separatorLine1 = new System.Windows.Forms.ToolStripSeparator();
@@ -72,7 +73,6 @@ namespace MyNotepad
             this.separatorMenu3 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutNotepadMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.lineIndicatorListBox = new System.Windows.Forms.ListBox();
-            this.openURLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,6 +144,14 @@ namespace MyNotepad
             this.openMenu.Size = new System.Drawing.Size(220, 22);
             this.openMenu.Text = "Open...";
             this.openMenu.Click += new System.EventHandler(this.openMenu_Click);
+            // 
+            // openURLMenu
+            // 
+            this.openURLMenu.Name = "openURLMenu";
+            this.openURLMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.openURLMenu.Size = new System.Drawing.Size(220, 22);
+            this.openURLMenu.Text = "Open URL";
+            this.openURLMenu.Click += new System.EventHandler(this.openURLMenu_Click);
             // 
             // saveMenu
             // 
@@ -342,7 +350,7 @@ namespace MyNotepad
             // wordWrapMenu
             // 
             this.wordWrapMenu.Name = "wordWrapMenu";
-            this.wordWrapMenu.Size = new System.Drawing.Size(148, 22);
+            this.wordWrapMenu.Size = new System.Drawing.Size(180, 22);
             this.wordWrapMenu.Text = "Word Wrap";
             this.wordWrapMenu.Click += new System.EventHandler(this.wordWrapMenu_Click);
             // 
@@ -350,7 +358,7 @@ namespace MyNotepad
             // 
             this.fontMenu.Name = "fontMenu";
             this.fontMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.fontMenu.Size = new System.Drawing.Size(148, 22);
+            this.fontMenu.Size = new System.Drawing.Size(180, 22);
             this.fontMenu.Text = "Font...";
             this.fontMenu.Click += new System.EventHandler(this.fontMenu_Click);
             // 
@@ -369,7 +377,7 @@ namespace MyNotepad
             this.zoomOutToolStripMenuItem,
             this.restoreDefaultToolStripMenuItem});
             this.zoomMenu.Name = "zoomMenu";
-            this.zoomMenu.Size = new System.Drawing.Size(106, 22);
+            this.zoomMenu.Size = new System.Drawing.Size(180, 22);
             this.zoomMenu.Text = "Zoom";
             // 
             // zoomInToolStripMenuItem
@@ -408,25 +416,25 @@ namespace MyNotepad
             // viewHelpMenu
             // 
             this.viewHelpMenu.Name = "viewHelpMenu";
-            this.viewHelpMenu.Size = new System.Drawing.Size(156, 22);
+            this.viewHelpMenu.Size = new System.Drawing.Size(180, 22);
             this.viewHelpMenu.Text = "View Help";
             this.viewHelpMenu.Click += new System.EventHandler(this.viewHelpMenu_Click);
             // 
             // sendFeedbackMenu
             // 
             this.sendFeedbackMenu.Name = "sendFeedbackMenu";
-            this.sendFeedbackMenu.Size = new System.Drawing.Size(156, 22);
+            this.sendFeedbackMenu.Size = new System.Drawing.Size(180, 22);
             this.sendFeedbackMenu.Text = "Send Feedback";
             // 
             // separatorMenu3
             // 
             this.separatorMenu3.Name = "separatorMenu3";
-            this.separatorMenu3.Size = new System.Drawing.Size(153, 6);
+            this.separatorMenu3.Size = new System.Drawing.Size(177, 6);
             // 
             // aboutNotepadMenu
             // 
             this.aboutNotepadMenu.Name = "aboutNotepadMenu";
-            this.aboutNotepadMenu.Size = new System.Drawing.Size(156, 22);
+            this.aboutNotepadMenu.Size = new System.Drawing.Size(180, 22);
             this.aboutNotepadMenu.Text = "About Notepad";
             this.aboutNotepadMenu.Click += new System.EventHandler(this.aboutNotepadMenu_Click);
             // 
@@ -443,14 +451,6 @@ namespace MyNotepad
             this.lineIndicatorListBox.SelectedIndexChanged += new System.EventHandler(this.lineIndicatorListBox_SelectedIndexChanged);
             this.lineIndicatorListBox.MouseEnter += new System.EventHandler(this.lineIndicatorListBox_MouseEnter);
             this.lineIndicatorListBox.MouseLeave += new System.EventHandler(this.lineIndicatorListBox_MouseLeave);
-            // 
-            // openURLMenu
-            // 
-            this.openURLMenu.Name = "openURLMenu";
-            this.openURLMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.openURLMenu.Size = new System.Drawing.Size(220, 22);
-            this.openURLMenu.Text = "Open URL";
-            this.openURLMenu.Click += new System.EventHandler(this.openURLMenu_Click);
             // 
             // MainForm
             // 

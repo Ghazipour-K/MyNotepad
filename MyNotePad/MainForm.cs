@@ -27,7 +27,6 @@ namespace MyNotepad
         private bool _isDocumentChanged = false;
         private string _documentTitle = "Untitled";
         private bool _isDocumentSaved = false;
-        private bool _isExistingDocumentLoaded = false;
         //private void saveStreamAsPDF()
         //{
         //    try
@@ -245,7 +244,7 @@ namespace MyNotepad
         private void printMenu_Click(object sender, EventArgs e)
         {
             _printDialog.Document = _printDocument;
-            if (_printDialog.ShowDialog() == DialogResult.OK) _printDocument.Print();
+            if (_printDialog.ShowDialog().Equals(DialogResult.OK)) _printDocument.Print();
         }
 
         private void goToLineMenu_Click(object sender, EventArgs e)
@@ -304,9 +303,9 @@ namespace MyNotepad
 
         private void deleteMenu_Click(object sender, EventArgs e)
         {
-            int s = noteTextBox.SelectionStart;
+            int SelectionStart = noteTextBox.SelectionStart;
             noteTextBox.Text = noteTextBox.Text.Remove(noteTextBox.SelectionStart, noteTextBox.SelectionLength);
-            noteTextBox.SelectionStart = s;
+            noteTextBox.SelectionStart = SelectionStart;
         }
 
         private void undoMenu_Click(object sender, EventArgs e)
@@ -327,6 +326,8 @@ namespace MyNotepad
 
         private void pageSetupMenu_Click(object sender, EventArgs e)
         {
+            _printDocument.DocumentName = noteTextBox.Text;
+            _pageSetupDialog.Document = _printDocument;
             if (_pageSetupDialog.ShowDialog() == DialogResult.OK)
             {
                 _printDocument.DefaultPageSettings = _pageSetupDialog.PageSettings;
