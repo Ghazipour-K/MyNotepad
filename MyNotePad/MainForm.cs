@@ -21,12 +21,12 @@ namespace MyNotepad
         private PrintDocument _printDocument = new PrintDocument();
         private PrintDialog _printDialog = new PrintDialog();
         private PageSetupDialog _pageSetupDialog = new PageSetupDialog();
-
         private FontDialog _fontDialog = new FontDialog();
         private string _loadedFilePath = string.Empty;
         private bool _isDocumentChanged = false;
         private string _documentTitle = "Untitled";
         private bool _isDocumentSaved = false;
+        private bool _isExistingDocumentLoaded = false;
         //private void saveStreamAsPDF()
         //{
         //    try
@@ -70,29 +70,29 @@ namespace MyNotepad
         //    }
         //}
 
-        private void SaveTextAsPDF(string fileName)
+        private void SaveAsPDF(string fileName)
         {
-                string line = null;
-                int yPoint = 0;
+            string line = null;
+            int yPoint = 0;
 
-                PdfDocument pdf = new PdfDocument();
-                pdf.PageLayout = PdfPageLayout.SinglePage;
-                pdf.Info.Title = "TXT to PDF";
-                PdfPage pdfPage = pdf.AddPage();
-                pdfPage.Width = 1500;
-                pdfPage.Height = noteTextBox.Lines.Length * 40;
-                XGraphics graph = XGraphics.FromPdfPage(pdfPage);
-                XFont font = new XFont("Verdana", 20, XFontStyle.Regular);
+            PdfDocument pdf = new PdfDocument();
+            pdf.PageLayout = PdfPageLayout.SinglePage;
+            pdf.Info.Title = "TXT to PDF";
+            PdfPage pdfPage = pdf.AddPage();
+            pdfPage.Width = 1500;
+            pdfPage.Height = noteTextBox.Lines.Length * 40;
+            XGraphics graph = XGraphics.FromPdfPage(pdfPage);
+            XFont font = new XFont(_fontDialog.Font.Name, _fontDialog.Font.Size, XFontStyle.Regular);
 
-                for (int i = 0; i < noteTextBox.Lines.Length; i++)
-                {
-                    line = noteTextBox.Lines[i];
-                    graph.DrawString(line, font, XBrushes.Black, new XRect(40, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
-                    yPoint = yPoint + 40;
-                }
+            for (int i = 0; i < noteTextBox.Lines.Length; i++)
+            {
+                line = noteTextBox.Lines[i];
+                graph.DrawString(line, font, XBrushes.Black, new XRect(40, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
+                yPoint = yPoint + 40;
+            }
 
-                pdf.Save(fileName);
-                Process.Start(fileName);
+            pdf.Save(fileName);
+            Process.Start(fileName);
         }
 
         public MainForm()
@@ -115,9 +115,9 @@ namespace MyNotepad
                     if (saveFileDialog.ShowDialog().Equals(DialogResult.OK))
                     {
                         if (saveFileDialog.FilterIndex == 1 || saveFileDialog.FilterIndex == 3)
-                            File.WriteAllText(saveFileDialog.FileName, noteTextBox.Text);
+                            SaveAsTXT(saveFileDialog.FileName, noteTextBox.Text);
                         else
-                            SaveTextAsPDF(saveFileDialog.FileName);
+                            SaveAsPDF(saveFileDialog.FileName);
                         _isDocumentSaved = true;
                     }
                     else
@@ -129,6 +129,11 @@ namespace MyNotepad
                 MessageBox.Show(ex.ToString());
                 _isDocumentSaved = false;
             }
+        }
+
+        private void SaveAsTXT(string fileName, string text)
+        {
+            File.WriteAllText(fileName, text);
         }
 
         private void exitMenu_Click(object sender, EventArgs e)
@@ -424,7 +429,43 @@ namespace MyNotepad
 
         private void newDocumentMenu_Click(object sender, EventArgs e)
         {
-            //New document code here
+            if (_isDocumentChanged)
+            {
+                DialogResult UserChoice = MessageBox.Show("Do you want to save changes to current document?", Application.ProductName, MessageBoxButtons.YesNo);
+
+                if (UserChoice.Equals(DialogResult.Yes))
+                {
+                    saveMenu_Click(sender, e);
+                    _isDocumentChanged = false;
+                    _documentTitle = "Untitled";
+                    _isExistingDocumentLoaded = false;
+                    updateFormTitle();
+                }
+                else
+                {
+                    noteTextBox.Text = string.Empty;
+                    _isDocumentChanged = false;
+                    _documentTitle = "Untitled";
+                    _isExistingDocumentLoaded = false;
+                    updateFormTitle();
+                }
+            }
+            else
+            {
+                noteTextBox.Text = string.Empty;
+                _isDocumentChanged = false;
+                _documentTitle = "Untitled";
+                _isExistingDocumentLoaded = false;
+                updateFormTitle();
+            }
+        }
+
+        private void updateFormTitle()
+        {
+            if (_isDocumentChanged)
+                this.Text = _documentTitle + "* - " + Application.ProductName;
+            else
+                this.Text = _documentTitle + " - " + Application.ProductName;
         }
 
         private void MainForm_Resize(object sender, EventArgs e)

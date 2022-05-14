@@ -12,12 +12,12 @@ namespace MyNotepad
 {
     public partial class ReplaceForm : Form
     {
-        MainForm x;
+        MainForm mainForm;
         int lastIndex;
         public ReplaceForm(MainForm fmain)
         {
             InitializeComponent();
-             x = fmain;
+             mainForm = fmain;
         }
 
         private void Replace_Load(object sender, EventArgs e)
@@ -32,16 +32,16 @@ namespace MyNotepad
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
-            lastIndex = x.noteTextBox.Text.IndexOf(findTextBox.Text, lastIndex);
-            x.noteTextBox.SelectionStart = lastIndex;
-            x.noteTextBox.SelectionLength = findTextBox.Text.Length;
+            lastIndex = mainForm.noteTextBox.Text.IndexOf(findTextBox.Text, lastIndex);
+            mainForm.noteTextBox.SelectionStart = lastIndex;
+            mainForm.noteTextBox.SelectionLength = findTextBox.Text.Length;
             lastIndex += findTextBox.Text.Length;
-            x.Focus();
+            mainForm.Focus();
         }
 
         private void btnReplaceAll_Click(object sender, EventArgs e)
         {
-            x.noteTextBox.Text = x.noteTextBox.Text.Replace(findTextBox.Text, replaceTextBox.Text);
+            mainForm.noteTextBox.Text = mainForm.noteTextBox.Text.Replace(findTextBox.Text, replaceTextBox.Text);
         }
     }
 }
