@@ -90,6 +90,7 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Document.cs" />
     <Compile Include="FindForm.cs">
       <SubType>Form</SubType>
     </Compile>

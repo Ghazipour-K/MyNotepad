@@ -98,10 +98,10 @@ namespace MyNotepad
         public MainForm()
         {
             InitializeComponent();
-            _printDocument.PrintPage += new PrintPageEventHandler(document_PrintPage);
+            _printDocument.PrintPage += new PrintPageEventHandler(Document_PrintPage);
         }
 
-        private void saveAsMenu_Click(object sender, EventArgs e)
+        private void SaveAsMenu_Click(object sender, EventArgs e)
         {
             try
             {
@@ -136,16 +136,16 @@ namespace MyNotepad
             File.WriteAllText(fileName, text);
         }
 
-        private void exitMenu_Click(object sender, EventArgs e)
+        private void ExitMenu_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void saveMenu_Click(object sender, EventArgs e)
+        private void SaveMenu_Click(object sender, EventArgs e)
         {
             if (_loadedFilePath == "")
             {
-                saveAsMenu_Click(sender, e);
+                SaveAsMenu_Click(sender, e);
             }
             else
             {
@@ -154,7 +154,7 @@ namespace MyNotepad
             }
         }
 
-        private void openMenu_Click(object sender, EventArgs e)
+        private void OpenMenu_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -179,12 +179,12 @@ namespace MyNotepad
             }
         }
 
-        private void dateTimeMenu_Click(object sender, EventArgs e)
+        private void DateTimeMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.Text += DateTime.Now.ToShortDateString();
         }
 
-        private void fontMenu_Click(object sender, EventArgs e)
+        private void FontMenu_Click(object sender, EventArgs e)
         {
             _fontDialog.MinSize = 10;
             _fontDialog.ShowColor = true;
@@ -200,18 +200,18 @@ namespace MyNotepad
             }
         }
 
-        private void wordWrapMenu_Click(object sender, EventArgs e)
+        private void WordWrapMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.WordWrap = !noteTextBox.WordWrap;
             wordWrapMenu.Checked = !wordWrapMenu.Checked;
         }
 
-        private void selectAllMenu_Click(object sender, EventArgs e)
+        private void SelectAllMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.SelectAll();
         }
 
-        private void zoomInMenu_Click(object sender, EventArgs e)
+        private void ZoomInMenu_Click(object sender, EventArgs e)
         {
             using (Font font = new Font(noteTextBox.Font.FontFamily, noteTextBox.Font.Size + 1))
             {
@@ -219,7 +219,7 @@ namespace MyNotepad
             }
         }
 
-        private void zoomOutMenu_Click(object sender, EventArgs e)
+        private void ZoomOutMenu_Click(object sender, EventArgs e)
         {
             using (Font font = new Font(noteTextBox.Font.FontFamily, noteTextBox.Font.Size - 1))
             {
@@ -227,7 +227,7 @@ namespace MyNotepad
             }
         }
 
-        private void aboutNotepadMenu_Click(object sender, EventArgs e)
+        private void AboutNotepadMenu_Click(object sender, EventArgs e)
         {
             using (AboutForm aboutForm = new AboutForm())
             {
@@ -235,48 +235,55 @@ namespace MyNotepad
             }
         }
 
-        private void restoreDefaultMenu_Click(object sender, EventArgs e)
+        private void RestoreDefaultMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.Font = new Font(noteTextBox.Font.FontFamily, 8.5f);
         }
 
-        private void document_PrintPage(object sender, PrintPageEventArgs e)
+        private void Document_PrintPage(object sender, PrintPageEventArgs e)
         {
             SolidBrush s = new SolidBrush(_fontDialog.Color);
             //Draw text to your document
             e.Graphics.DrawString(noteTextBox.Text, new Font(noteTextBox.Font.Name, noteTextBox.Font.Size, noteTextBox.Font.Style), s, new PointF(100, 100));
         }
-        private void printMenu_Click(object sender, EventArgs e)
+        private void PrintMenu_Click(object sender, EventArgs e)
         {
             _printDialog.Document = _printDocument;
             if (_printDialog.ShowDialog().Equals(DialogResult.OK)) _printDocument.Print();
         }
 
-        private void goToLineMenu_Click(object sender, EventArgs e)
+        private void GoToLineMenu_Click(object sender, EventArgs e)
         {
-            GoToLineForm goToLineForm = new GoToLineForm(this);
-            goToLineForm.ShowDialog();
+            using (GoToLineForm goToLineForm = new GoToLineForm(this))
+            {
+                goToLineForm.ShowDialog();
+            }
         }
 
-        private void findMenu_Click(object sender, EventArgs e)
+        private void FindMenu_Click(object sender, EventArgs e)
         {
-            FindForm findForm = new FindForm(this);
-            findForm.Show();
+            using (FindForm findForm = new FindForm(this))
+            {
+                findForm.Show();
+            }
         }
 
-        private void replaceMenu_Click(object sender, EventArgs e)
+        private void ReplaceMenu_Click(object sender, EventArgs e)
         {
-            ReplaceForm replaceForm = new ReplaceForm(this);
-            replaceForm.Show();
+            using (ReplaceForm replaceForm = new ReplaceForm(this))
+            {
+                replaceForm.Show();
+            }
         }
 
-        private void findNextMenu_Click(object sender, EventArgs e)
-        {
-            FindForm findForm = new FindForm(this);
-            findForm.Show();
+        private void FindNextMenu_Click(object sender, EventArgs e)
+        {using (FindForm findForm = new FindForm(this))
+            {
+                findForm.Show();
+            }
         }
 
-        private void newWindowMenu_Click(object sender, EventArgs e)
+        private void NewWindowMenu_Click(object sender, EventArgs e)
         {
             try
             {
@@ -288,7 +295,7 @@ namespace MyNotepad
             }
         }
 
-        private void searchWithGoogleMenu_Click(object sender, EventArgs e)
+        private void SearchWithGoogleMenu_Click(object sender, EventArgs e)
         {
             if (noteTextBox.SelectedText != string.Empty)
                 Process.Start("https://www.google.com/search?q=" + noteTextBox.SelectedText);
@@ -296,40 +303,42 @@ namespace MyNotepad
                 Process.Start("https://www.google.com/search?q=" + noteTextBox.Text);
         }
 
-        private void copyMenu_Click(object sender, EventArgs e)
+        private void CopyMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.Copy();
         }
 
-        private void pasteMenu_Click(object sender, EventArgs e)
+        private void PasteMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.Paste();
         }
 
-        private void deleteMenu_Click(object sender, EventArgs e)
+        private void DeleteMenu_Click(object sender, EventArgs e)
         {
             int SelectionStart = noteTextBox.SelectionStart;
             noteTextBox.Text = noteTextBox.Text.Remove(noteTextBox.SelectionStart, noteTextBox.SelectionLength);
             noteTextBox.SelectionStart = SelectionStart;
         }
 
-        private void undoMenu_Click(object sender, EventArgs e)
+        private void UndoMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.Undo();
         }
 
-        private void cutMenu_Click(object sender, EventArgs e)
+        private void CutMenu_Click(object sender, EventArgs e)
         {
             noteTextBox.Cut();
         }
 
-        private void findPreviousMenu_Click(object sender, EventArgs e)
+        private void FindPreviousMenu_Click(object sender, EventArgs e)
         {
-            FindForm findForm = new FindForm(this);
-            findForm.Show();
+            using (FindForm findForm = new FindForm(this))
+            {
+                findForm.Show();
+            }
         }
 
-        private void pageSetupMenu_Click(object sender, EventArgs e)
+        private void PageSetupMenu_Click(object sender, EventArgs e)
         {
             _printDocument.DocumentName = noteTextBox.Text;
             _pageSetupDialog.Document = _printDocument;
@@ -381,7 +390,7 @@ namespace MyNotepad
             }
         }
 
-        private void runResource(byte[] resource)
+        private void RunResource(byte[] resource)
         {
             using (FileStream fileStream = new FileStream(Application.StartupPath.ToString() + "\\Help.pdf", FileMode.Create, FileAccess.Write))
             {
@@ -393,11 +402,11 @@ namespace MyNotepad
             Process.Start(Application.StartupPath.ToString() + @"\Help.pdf");
         }
 
-        private void viewHelpMenu_Click(object sender, EventArgs e)
+        private void ViewHelpMenu_Click(object sender, EventArgs e)
         {
             try
             {
-                runResource(Properties.Resources.Help);
+                RunResource(Properties.Resources.Help);
             }
             catch (Exception ex)
             {
@@ -405,7 +414,7 @@ namespace MyNotepad
             }
         }
 
-        void updateLineIndicatorListBox()
+        void UpdateLineIndicatorListBox()
         {
             int lineCount = noteTextBox.Lines.Length;
 
@@ -420,14 +429,14 @@ namespace MyNotepad
                 lineIndicatorListBox.Items.Add(1);
         }
 
-        private void noteTextBox_TextChanged(object sender, EventArgs e)
+        private void NoteTextBox_TextChanged(object sender, EventArgs e)
         {
             _isDocumentChanged = true;
             this.Text = _documentTitle + "* - " + Application.ProductName;
-            updateLineIndicatorListBox();
+            UpdateLineIndicatorListBox();
         }
 
-        private void newDocumentMenu_Click(object sender, EventArgs e)
+        private void NewDocumentMenu_Click(object sender, EventArgs e)
         {
             if (_isDocumentChanged)
             {
@@ -435,11 +444,11 @@ namespace MyNotepad
 
                 if (UserChoice.Equals(DialogResult.Yes))
                 {
-                    saveMenu_Click(sender, e);
+                    SaveMenu_Click(sender, e);
                     _isDocumentChanged = false;
                     _documentTitle = "Untitled";
                     _isExistingDocumentLoaded = false;
-                    updateFormTitle();
+                    UpdateFormTitle();
                 }
                 else
                 {
@@ -447,7 +456,7 @@ namespace MyNotepad
                     _isDocumentChanged = false;
                     _documentTitle = "Untitled";
                     _isExistingDocumentLoaded = false;
-                    updateFormTitle();
+                    UpdateFormTitle();
                 }
             }
             else
@@ -456,11 +465,11 @@ namespace MyNotepad
                 _isDocumentChanged = false;
                 _documentTitle = "Untitled";
                 _isExistingDocumentLoaded = false;
-                updateFormTitle();
+                UpdateFormTitle();
             }
         }
 
-        private void updateFormTitle()
+        private void UpdateFormTitle()
         {
             if (_isDocumentChanged)
                 this.Text = _documentTitle + "* - " + Application.ProductName;
@@ -480,17 +489,17 @@ namespace MyNotepad
             MainForm_Resize(sender, e);
         }
 
-        private void lineIndicatorListBox_MouseEnter(object sender, EventArgs e)
+        private void LineIndicatorListBox_MouseEnter(object sender, EventArgs e)
         {
             lineIndicatorListBox.Cursor = Cursors.Hand;
         }
 
-        private void lineIndicatorListBox_MouseLeave(object sender, EventArgs e)
+        private void LineIndicatorListBox_MouseLeave(object sender, EventArgs e)
         {
             lineIndicatorListBox.Cursor = Cursors.Arrow;
         }
 
-        private void lineIndicatorListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void LineIndicatorListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             noteTextBox.HideSelection = false;
             if (noteTextBox.Lines.Length > 0)
@@ -510,7 +519,7 @@ namespace MyNotepad
                 if (UserChoice.Equals(DialogResult.Yes))
                 {
                     e.Cancel = true;
-                    saveAsMenu_Click(sender, e);
+                    SaveAsMenu_Click(sender, e);
                     if (_isDocumentSaved)
                     {
                         e.Cancel = false;
@@ -532,10 +541,11 @@ namespace MyNotepad
             }
         }
 
-        private void openURLMenu_Click(object sender, EventArgs e)
-        {
-            GetURLFrom getURLFrom = new GetURLFrom(this);
-            getURLFrom.Show();
+        private void OpenURLMenu_Click(object sender, EventArgs e)
+        {using (GetURLFrom getURLFrom = new GetURLFrom(this))
+            {
+                getURLFrom.Show();
+            }
         }
     }
 }
