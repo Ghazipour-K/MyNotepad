@@ -60,7 +60,7 @@ namespace MyNotepad
             this.loadURLButton.TabIndex = 2;
             this.loadURLButton.Text = "Load URL";
             this.loadURLButton.UseVisualStyleBackColor = true;
-            this.loadURLButton.Click += new System.EventHandler(this.loadURLButton_Click);
+            this.loadURLButton.Click += new System.EventHandler(this.LoadURLButton_Click);
             // 
             // cancleButton
             // 
@@ -71,7 +71,7 @@ namespace MyNotepad
             this.cancleButton.TabIndex = 2;
             this.cancleButton.Text = "Cancle";
             this.cancleButton.UseVisualStyleBackColor = true;
-            this.cancleButton.Click += new System.EventHandler(this.cancleButton_Click);
+            this.cancleButton.Click += new System.EventHandler(this.CancleButton_Click);
             // 
             // GetURLFrom
             // 

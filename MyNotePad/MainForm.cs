@@ -16,8 +16,15 @@ using PdfSharp.Pdf;
 
 namespace MyNotepad
 {
+    enum FileExtentions
+    {
+        TXT = 1,
+        PDF = 2,
+        AllFiles = 3
+    }
     public partial class MainForm : Form
     {
+        private Document _document = new Document();
         private PrintDocument _printDocument = new PrintDocument();
         private PrintDialog _printDialog = new PrintDialog();
         private PageSetupDialog _pageSetupDialog = new PageSetupDialog();
@@ -114,10 +121,11 @@ namespace MyNotepad
 
                     if (saveFileDialog.ShowDialog().Equals(DialogResult.OK))
                     {
-                        if (saveFileDialog.FilterIndex == 1 || saveFileDialog.FilterIndex == 3)
-                            SaveAsTXT(saveFileDialog.FileName, noteTextBox.Text);
+                        if (saveFileDialog.FilterIndex.Equals(FileExtentions.TXT) || saveFileDialog.FilterIndex.Equals(FileExtentions.AllFiles))
+                            _document.SaveAsText(saveFileDialog.FileName, noteTextBox.Text);
                         else
-                            SaveAsPDF(saveFileDialog.FileName);
+                            _document.SaveAsPDF(saveFileDialog.FileName, noteTextBox.Lines);
+
                         _isDocumentSaved = true;
                     }
                     else
@@ -129,11 +137,6 @@ namespace MyNotepad
                 MessageBox.Show(ex.ToString());
                 _isDocumentSaved = false;
             }
-        }
-
-        private void SaveAsTXT(string fileName, string text)
-        {
-            File.WriteAllText(fileName, text);
         }
 
         private void ExitMenu_Click(object sender, EventArgs e)
@@ -149,7 +152,7 @@ namespace MyNotepad
             }
             else
             {
-                File.WriteAllText(_loadedFilePath, noteTextBox.Text);
+                _document.SaveAsText(_loadedFilePath, noteTextBox.Text);
                 this.Text = this.Text.Replace('*', ' ');
             }
         }
@@ -164,7 +167,7 @@ namespace MyNotepad
                 {
                     if (File.Exists(openFileDialog.FileName))
                     {
-                        noteTextBox.Text = File.ReadAllText(openFileDialog.FileName);
+                        noteTextBox.Text = _document.Load(openFileDialog.FileName);
                         _isDocumentChanged = false;
                         _isExistingDocumentLoaded = true;
                         _documentTitle = openFileDialog.SafeFileName;
@@ -262,25 +265,22 @@ namespace MyNotepad
 
         private void FindMenu_Click(object sender, EventArgs e)
         {
-            using (FindForm findForm = new FindForm(this))
-            {
-                findForm.Show();
-            }
+            FindForm findForm = new FindForm(this);
+            findForm.Show();
+            findForm.Dispose();
         }
-
         private void ReplaceMenu_Click(object sender, EventArgs e)
         {
-            using (ReplaceForm replaceForm = new ReplaceForm(this))
-            {
-                replaceForm.Show();
-            }
+            ReplaceForm replaceForm = new ReplaceForm(this);
+            replaceForm.Show();
+            replaceForm.Dispose();
         }
 
         private void FindNextMenu_Click(object sender, EventArgs e)
-        {using (FindForm findForm = new FindForm(this))
-            {
-                findForm.Show();
-            }
+        {
+            FindForm findForm = new FindForm(this);
+            findForm.Show();
+            findForm.Dispose();
         }
 
         private void NewWindowMenu_Click(object sender, EventArgs e)
@@ -332,10 +332,9 @@ namespace MyNotepad
 
         private void FindPreviousMenu_Click(object sender, EventArgs e)
         {
-            using (FindForm findForm = new FindForm(this))
-            {
-                findForm.Show();
-            }
+            FindForm findForm = new FindForm(this);
+            findForm.Show();
+            findForm.Dispose();
         }
 
         private void PageSetupMenu_Click(object sender, EventArgs e)
@@ -392,14 +391,14 @@ namespace MyNotepad
 
         private void RunResource(byte[] resource)
         {
-            using (FileStream fileStream = new FileStream(Application.StartupPath.ToString() + "\\Help.pdf", FileMode.Create, FileAccess.Write))
+            using (FileStream fileStream = new FileStream(Application.StartupPath.ToString() + @"\Doc.pdf", FileMode.Create, FileAccess.Write))
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
                 {
                     binaryWriter.Write(resource);
                 }
             }
-            Process.Start(Application.StartupPath.ToString() + @"\Help.pdf");
+            Process.Start(Application.StartupPath.ToString() + @"\Doc.pdf");
         }
 
         private void ViewHelpMenu_Click(object sender, EventArgs e)
@@ -414,7 +413,7 @@ namespace MyNotepad
             }
         }
 
-        void UpdateLineIndicatorListBox()
+        private void UpdateLineIndicatorListBox()
         {
             int lineCount = noteTextBox.Lines.Length;
 
@@ -542,10 +541,9 @@ namespace MyNotepad
         }
 
         private void OpenURLMenu_Click(object sender, EventArgs e)
-        {using (GetURLFrom getURLFrom = new GetURLFrom(this))
-            {
-                getURLFrom.Show();
-            }
+        {
+            GetURLFrom getURLFrom = new GetURLFrom(this);
+            getURLFrom.Show();
         }
     }
 }
