@@ -22,7 +22,7 @@ namespace MyNotepad
         public bool IsDocumentSaved { get => _isDocumentSaved; set => _isDocumentSaved = value; }
         public string DocumentTitle { get => _documentTitle; set => _documentTitle = value; }
 
-        public Document() { }
+        public Document(Font font) { _font = font; }
         ~Document() { }
 
         public void SaveAsPDF(string fileName, string[] content)

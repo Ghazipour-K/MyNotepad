@@ -27,7 +27,7 @@ namespace MyNotepad
 
         private void LoadURLButton_Click(object sender, EventArgs e)
         {
-            Document document = new Document();
+            Document document = new Document(_mainForm.noteTextBox.Font);
             string DefaultFormTitle = this.Text;
             this.Text += "- Loading...";
             string URL = URLTextBox.Text.Trim();
