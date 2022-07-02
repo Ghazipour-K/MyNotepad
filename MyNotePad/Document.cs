@@ -16,6 +16,12 @@ namespace MyNotepad
         private bool _isDocumentChanged = false;
         private string _documentTitle = "Untitled";
         private bool _isDocumentSaved = false;
+
+        public string LoadedFilePath { get => _loadedFilePath; set => _loadedFilePath = value; }
+        public bool IsDocumentChanged { get => _isDocumentChanged; set => _isDocumentChanged = value; }
+        public bool IsDocumentSaved { get => _isDocumentSaved; set => _isDocumentSaved = value; }
+        public string DocumentTitle { get => _documentTitle; set => _documentTitle = value; }
+
         public Document() { }
         ~Document() { }
 
