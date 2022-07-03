@@ -66,6 +66,8 @@ namespace MyNotepad
             else
             {
                 document.SaveAsText(document.LoadedFilePath, noteTextBox.Text);
+                document.IsDocumentSaved = true;
+                document.IsDocumentChanged = false;
                 this.Text = this.Text.Replace('*', ' ');
             }
         }
@@ -82,7 +84,6 @@ namespace MyNotepad
                     {
                         noteTextBox.Text = document.Load(openFileDialog.FileName);
                         document.IsDocumentChanged = false;
-                        document.IsExistingDocumentLoaded = true;
                         document.Title = openFileDialog.SafeFileName;
                         this.Text = document.Title + " - " + Application.ProductName;
                         document.LoadedFilePath = openFileDialog.FileName;
@@ -286,8 +287,10 @@ namespace MyNotepad
                     {
                         noteTextBox.Text = File.ReadAllText(FileNames[0]);
                         document.IsDocumentChanged = false;
+                        document.LoadedFilePath = FileNames[0];
                         string[] SplitedFilePath = FileNames[0].Split('\\');
-                        this.Text = FileNames[0].Split('\\')[SplitedFilePath.Length - 1];//Safe file name
+                        document.Title = FileNames[0].Split('\\')[SplitedFilePath.Length - 1];//Safe file name
+                        UpdateFormTitle();
                     }
                 }
             }
@@ -339,7 +342,8 @@ namespace MyNotepad
         private void NoteTextBox_TextChanged(object sender, EventArgs e)
         {
             document.IsDocumentChanged = true;
-            this.Text = document.Title + "* - " + Application.ProductName;
+            //this.Text = document.Title + "* - " + Application.ProductName;
+            UpdateFormTitle();
             UpdateLineIndicatorListBox();
         }
 
@@ -354,7 +358,6 @@ namespace MyNotepad
                     SaveMenu_Click(sender, e);
                     document.IsDocumentChanged = false;
                     document.Title = "Untitled";
-                    document.IsExistingDocumentLoaded = false;
                     UpdateFormTitle();
                 }
                 else
@@ -362,7 +365,6 @@ namespace MyNotepad
                     noteTextBox.Text = string.Empty;
                     document.IsDocumentChanged = false;
                     document.Title = "Untitled";
-                    document.IsExistingDocumentLoaded = false;
                     UpdateFormTitle();
                 }
             }
@@ -371,7 +373,6 @@ namespace MyNotepad
                 noteTextBox.Text = string.Empty;
                 document.IsDocumentChanged = false;
                 document.Title = "Untitled";
-                document.IsExistingDocumentLoaded = false;
                 UpdateFormTitle();
             }
         }

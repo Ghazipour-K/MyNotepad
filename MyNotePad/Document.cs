@@ -10,21 +10,21 @@ namespace MyNotepad
 {
     public class Document : IDisposable
     {
-        private Font _font;
+        private Font _font = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Regular);
         private string _loadedFilePath = string.Empty;
         private bool _isDocumentChanged = false;
         private string _title = "Untitled";
         private bool _isDocumentSaved = false;
-        private bool _isExistingDocumentLoaded = false;
         private bool isDisposed;
 
         public string LoadedFilePath { get => _loadedFilePath; set => _loadedFilePath = value; }
         public bool IsDocumentChanged { get => _isDocumentChanged; set => _isDocumentChanged = value; }
         public bool IsDocumentSaved { get => _isDocumentSaved; set => _isDocumentSaved = value; }
         public string Title { get => _title; set => _title = value; }
-        public bool IsExistingDocumentLoaded { get => _isExistingDocumentLoaded; set => _isExistingDocumentLoaded = value; }
+        public Font Font { get => _font; set => _font = value; }
 
-        public Document(Font font) { _font = font; }
+        public Document(Font font) { Font = font; }
+        public Document() { }
 
         ~Document() { Dispose(false); }
 
@@ -40,7 +40,7 @@ namespace MyNotepad
             pdfPage.Width = 1500;
             pdfPage.Height = content.Length * 40;
             XGraphics graph = XGraphics.FromPdfPage(pdfPage);
-            XFont font = new XFont(_font.Name, _font.Size, XFontStyle.Regular);
+            XFont font = new XFont(Font.Name, Font.Size, XFontStyle.Regular);
 
             for (int i = 0; i < content.Length; i++)
             {
