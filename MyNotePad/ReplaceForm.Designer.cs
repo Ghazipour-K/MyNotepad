@@ -81,6 +81,7 @@ namespace MyNotepad
             this.findNextButton.TabIndex = 4;
             this.findNextButton.Text = "Find Next";
             this.findNextButton.UseVisualStyleBackColor = true;
+            this.findNextButton.Click += new System.EventHandler(this.FindNextButton_Click);
             // 
             // replaceButton
             // 
@@ -90,7 +91,7 @@ namespace MyNotepad
             this.replaceButton.TabIndex = 5;
             this.replaceButton.Text = "Replace";
             this.replaceButton.UseVisualStyleBackColor = true;
-            this.replaceButton.Click += new System.EventHandler(this.btnReplace_Click);
+            this.replaceButton.Click += new System.EventHandler(this.BtnReplace_Click);
             // 
             // replaceAllButton
             // 
@@ -100,7 +101,7 @@ namespace MyNotepad
             this.replaceAllButton.TabIndex = 6;
             this.replaceAllButton.Text = "Replace All";
             this.replaceAllButton.UseVisualStyleBackColor = true;
-            this.replaceAllButton.Click += new System.EventHandler(this.btnReplaceAll_Click);
+            this.replaceAllButton.Click += new System.EventHandler(this.BtnReplaceAll_Click);
             // 
             // cancelButton
             // 
@@ -111,7 +112,7 @@ namespace MyNotepad
             this.cancelButton.TabIndex = 7;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // chkboxMatchcase
             // 

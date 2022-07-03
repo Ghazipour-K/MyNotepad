@@ -28,11 +28,6 @@ namespace MyNotepad
         private PrintDialog _printDialog = new PrintDialog();
         private PageSetupDialog _pageSetupDialog = new PageSetupDialog();
         private FontDialog _fontDialog = new FontDialog();
-        //private string _loadedFilePath = string.Empty;
-        //private bool _isDocumentChanged = false;
-        private string _documentTitle = "Untitled";
-        private bool _isDocumentSaved = false;
-        private bool _isExistingDocumentLoaded = false;
         private Document _document = new Document(DefaultFont);
 
         //private void saveStreamAsPDF()
@@ -78,30 +73,30 @@ namespace MyNotepad
         //    }
         //}
 
-        private void SaveAsPDF(string fileName)
-        {
-            string line = null;
-            int yPoint = 0;
+        //private void SaveAsPDF(string fileName)
+        //{
+        //    string line = null;
+        //    int yPoint = 0;
 
-            PdfDocument pdf = new PdfDocument();
-            pdf.PageLayout = PdfPageLayout.SinglePage;
-            pdf.Info.Title = "TXT to PDF";
-            PdfPage pdfPage = pdf.AddPage();
-            pdfPage.Width = 1500;
-            pdfPage.Height = noteTextBox.Lines.Length * 40;
-            XGraphics graph = XGraphics.FromPdfPage(pdfPage);
-            XFont font = new XFont(_fontDialog.Font.Name, _fontDialog.Font.Size, XFontStyle.Regular);
+        //    PdfDocument pdf = new PdfDocument();
+        //    pdf.PageLayout = PdfPageLayout.SinglePage;
+        //    pdf.Info.Title = "TXT to PDF";
+        //    PdfPage pdfPage = pdf.AddPage();
+        //    pdfPage.Width = 1500;
+        //    pdfPage.Height = noteTextBox.Lines.Length * 40;
+        //    XGraphics graph = XGraphics.FromPdfPage(pdfPage);
+        //    XFont font = new XFont(_fontDialog.Font.Name, _fontDialog.Font.Size, XFontStyle.Regular);
 
-            for (int i = 0; i < noteTextBox.Lines.Length; i++)
-            {
-                line = noteTextBox.Lines[i];
-                graph.DrawString(line, font, XBrushes.Black, new XRect(40, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
-                yPoint = yPoint + 40;
-            }
+        //    for (int i = 0; i < noteTextBox.Lines.Length; i++)
+        //    {
+        //        line = noteTextBox.Lines[i];
+        //        graph.DrawString(line, font, XBrushes.Black, new XRect(40, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
+        //        yPoint = yPoint + 40;
+        //    }
 
-            pdf.Save(fileName);
-            Process.Start(fileName);
-        }
+        //    pdf.Save(fileName);
+        //    Process.Start(fileName);
+        //}
 
         public MainForm()
         {
@@ -127,16 +122,16 @@ namespace MyNotepad
                         else
                             _document.SaveAsPDF(saveFileDialog.FileName, noteTextBox.Lines);
 
-                        _isDocumentSaved = true;
+                        _document.IsDocumentSaved = true;
                     }
                     else
-                        _isDocumentSaved = false;
+                        _document.IsDocumentSaved = false;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-                _isDocumentSaved = false;
+                _document.IsDocumentSaved = false;
             }
         }
 
@@ -170,9 +165,9 @@ namespace MyNotepad
                     {
                         noteTextBox.Text = _document.Load(openFileDialog.FileName);
                         _document.IsDocumentChanged = false;
-                        _isExistingDocumentLoaded = true;
-                        _documentTitle = openFileDialog.SafeFileName;
-                        this.Text = _documentTitle + " - " + Application.ProductName;
+                        _document.IsExistingDocumentLoaded = true;
+                        _document.Title = openFileDialog.SafeFileName;
+                        this.Text = _document.Title + " - " + Application.ProductName;
                         _document.LoadedFilePath = openFileDialog.FileName;
                     }
                 }
@@ -194,13 +189,12 @@ namespace MyNotepad
             _fontDialog.ShowColor = true;
             _fontDialog.ShowEffects = true;
             _fontDialog.ShowApply = true;
+
             if (_fontDialog.ShowDialog().Equals(DialogResult.OK))
             {
                 noteTextBox.Font = _fontDialog.Font;
                 noteTextBox.ForeColor = _fontDialog.Color;
                 lineIndicatorListBox.Font = _fontDialog.Font;
-                //lineIndicatorListBox.Font = new Font(lineIndicatorListBox.Font.Name, _fontDialog.Font.Size);
-                //updateLineIndicatorListBox();
             }
         }
 
@@ -247,7 +241,7 @@ namespace MyNotepad
         private void Document_PrintPage(object sender, PrintPageEventArgs e)
         {
             SolidBrush s = new SolidBrush(_fontDialog.Color);
-            //Draw text to your document
+            //Draw text to the document
             e.Graphics.DrawString(noteTextBox.Text, new Font(noteTextBox.Font.Name, noteTextBox.Font.Size, noteTextBox.Font.Style), s, new PointF(100, 100));
         }
         private void PrintMenu_Click(object sender, EventArgs e)
@@ -268,20 +262,17 @@ namespace MyNotepad
         {
             FindForm findForm = new FindForm(this);
             findForm.Show();
-            findForm.Dispose();
         }
         private void ReplaceMenu_Click(object sender, EventArgs e)
         {
             ReplaceForm replaceForm = new ReplaceForm(this);
             replaceForm.Show();
-            replaceForm.Dispose();
         }
 
         private void FindNextMenu_Click(object sender, EventArgs e)
         {
             FindForm findForm = new FindForm(this);
             findForm.Show();
-            findForm.Dispose();
         }
 
         private void NewWindowMenu_Click(object sender, EventArgs e)
@@ -335,7 +326,6 @@ namespace MyNotepad
         {
             FindForm findForm = new FindForm(this);
             findForm.Show();
-            findForm.Dispose();
         }
 
         private void PageSetupMenu_Click(object sender, EventArgs e)
@@ -352,7 +342,7 @@ namespace MyNotepad
         private void Main_Load(object sender, EventArgs e)
         {
             this.Icon = Properties.Resources.Icon;
-            this.Text = _documentTitle + " - " + Application.ProductName;
+            this.Text = _document.Title + " - " + Application.ProductName;
             noteTextBox.AllowDrop = true;
             noteTextBox.DragDrop += NoteTextBox_DragDrop;
             noteTextBox.DragOver += NoteTextBox_DragOver;
@@ -432,7 +422,7 @@ namespace MyNotepad
         private void NoteTextBox_TextChanged(object sender, EventArgs e)
         {
             _document.IsDocumentChanged = true;
-            this.Text = _documentTitle + "* - " + Application.ProductName;
+            this.Text = _document.Title + "* - " + Application.ProductName;
             UpdateLineIndicatorListBox();
         }
 
@@ -446,16 +436,16 @@ namespace MyNotepad
                 {
                     SaveMenu_Click(sender, e);
                     _document.IsDocumentChanged = false;
-                    _documentTitle = "Untitled";
-                    _isExistingDocumentLoaded = false;
+                    _document.Title = "Untitled";
+                    _document.IsExistingDocumentLoaded = false;
                     UpdateFormTitle();
                 }
                 else
                 {
                     noteTextBox.Text = string.Empty;
                     _document.IsDocumentChanged = false;
-                    _documentTitle = "Untitled";
-                    _isExistingDocumentLoaded = false;
+                    _document.Title = "Untitled";
+                    _document.IsExistingDocumentLoaded = false;
                     UpdateFormTitle();
                 }
             }
@@ -463,8 +453,8 @@ namespace MyNotepad
             {
                 noteTextBox.Text = string.Empty;
                 _document.IsDocumentChanged = false;
-                _documentTitle = "Untitled";
-                _isExistingDocumentLoaded = false;
+                _document.Title = "Untitled";
+                _document.IsExistingDocumentLoaded = false;
                 UpdateFormTitle();
             }
         }
@@ -472,9 +462,9 @@ namespace MyNotepad
         private void UpdateFormTitle()
         {
             if (_document.IsDocumentChanged)
-                this.Text = _documentTitle + "* - " + Application.ProductName;
+                this.Text = _document.Title + "* - " + Application.ProductName;
             else
-                this.Text = _documentTitle + " - " + Application.ProductName;
+                this.Text = _document.Title + " - " + Application.ProductName;
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
@@ -520,7 +510,7 @@ namespace MyNotepad
                 {
                     e.Cancel = true;
                     SaveAsMenu_Click(sender, e);
-                    if (_isDocumentSaved)
+                    if (_document.IsDocumentSaved)
                     {
                         e.Cancel = false;
                         Application.Exit();

@@ -25,12 +25,12 @@ namespace MyNotepad
             this.Icon = Properties.Resources.Icon;
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void btnReplace_Click(object sender, EventArgs e)
+        private void BtnReplace_Click(object sender, EventArgs e)
         {
             lastIndex = mainForm.noteTextBox.Text.IndexOf(findTextBox.Text, lastIndex);
             mainForm.noteTextBox.SelectionStart = lastIndex;
@@ -39,9 +39,14 @@ namespace MyNotepad
             mainForm.Focus();
         }
 
-        private void btnReplaceAll_Click(object sender, EventArgs e)
+        private void BtnReplaceAll_Click(object sender, EventArgs e)
         {
             mainForm.noteTextBox.Text = mainForm.noteTextBox.Text.Replace(findTextBox.Text, replaceTextBox.Text);
+        }
+
+        private void FindNextButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

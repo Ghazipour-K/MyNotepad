@@ -35,9 +35,6 @@ namespace MyNotepad
             {
                 try
                 {
-                    //WebClient client = new WebClient();
-                    //string Reply = string.Empty;
-                    //await Task.Run(() => { Reply = client.DownloadString(URL); });
                     _mainForm.noteTextBox.Text = document.LoadURL(URL).Result;
                     this.Close();
                 }

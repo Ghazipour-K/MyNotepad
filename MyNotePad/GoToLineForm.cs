@@ -20,12 +20,12 @@ namespace MyNotepad
             _mainForm = mainForm;
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void gotoLineButton_Click(object sender, EventArgs e)
+        private void GotoLineButton_Click(object sender, EventArgs e)
         {
             if (int.TryParse(LineTextbox.Text, out _lineNumber))
             {

@@ -60,7 +60,7 @@ namespace MyNotepad
             this.gotoLineButton.TabIndex = 2;
             this.gotoLineButton.Text = "Go To";
             this.gotoLineButton.UseVisualStyleBackColor = true;
-            this.gotoLineButton.Click += new System.EventHandler(this.gotoLineButton_Click);
+            this.gotoLineButton.Click += new System.EventHandler(this.GotoLineButton_Click);
             // 
             // cancelButton
             // 
@@ -71,7 +71,7 @@ namespace MyNotepad
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // GoToLineForm
             // 

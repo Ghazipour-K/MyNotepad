@@ -65,7 +65,7 @@ namespace MyNotepad
             this.findNextButton.TabIndex = 2;
             this.findNextButton.Text = "Find Next";
             this.findNextButton.UseVisualStyleBackColor = true;
-            this.findNextButton.Click += new System.EventHandler(this.findNextBouton_Click);
+            this.findNextButton.Click += new System.EventHandler(this.FindNextBouton_Click);
             // 
             // cancelButton
             // 
@@ -76,7 +76,7 @@ namespace MyNotepad
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // matchCaseCheckBox
             // 

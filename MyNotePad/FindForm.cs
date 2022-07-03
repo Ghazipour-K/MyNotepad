@@ -13,7 +13,7 @@ namespace MyNotepad
     public partial class FindForm : Form
     {
         MainForm _mainForm;
-        int _lastIndex, _preIndex;
+        private int _lastIndex, _preIndex;
         public FindForm(MainForm mainForm)
         {
             InitializeComponent();
@@ -21,7 +21,7 @@ namespace MyNotepad
         }
 
 
-        private void findNextBouton_Click(object sender, EventArgs e)
+        private void FindNextBouton_Click(object sender, EventArgs e)
         {
 
             if (downRadioButton.Checked && _lastIndex<_mainForm.noteTextBox.Text.Length)
@@ -43,7 +43,7 @@ namespace MyNotepad
 
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
