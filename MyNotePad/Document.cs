@@ -4,12 +4,11 @@ using System.IO;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System.Net;
-
-
+using System;
 
 namespace MyNotepad
 {
-    public class Document
+    public class Document : IDisposable
     {
         private Font _font;
         private string _loadedFilePath = string.Empty;
@@ -17,7 +16,7 @@ namespace MyNotepad
         private string _title = "Untitled";
         private bool _isDocumentSaved = false;
         private bool _isExistingDocumentLoaded = false;
-
+        private bool isDisposed;
 
         public string LoadedFilePath { get => _loadedFilePath; set => _loadedFilePath = value; }
         public bool IsDocumentChanged { get => _isDocumentChanged; set => _isDocumentChanged = value; }
@@ -26,7 +25,8 @@ namespace MyNotepad
         public bool IsExistingDocumentLoaded { get => _isExistingDocumentLoaded; set => _isExistingDocumentLoaded = value; }
 
         public Document(Font font) { _font = font; }
-        ~Document() { }
+
+        ~Document() { Dispose(false); }
 
         public void SaveAsPDF(string fileName, string[] content)
         {
@@ -67,9 +67,24 @@ namespace MyNotepad
             return await Task.FromResult(client.DownloadString(URL));
         }
 
-        public void Print()
-        { }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                // free managed resources
+                this.Dispose();
+            }
+
+            isDisposed = true;
+        }
     }
 }
