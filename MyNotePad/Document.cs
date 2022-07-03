@@ -14,7 +14,7 @@ namespace MyNotepad
         private Font _font;
         private string _loadedFilePath = string.Empty;
         private bool _isDocumentChanged = false;
-        private string _documentTitle = "Untitled";
+        private string _title = "Untitled";
         private bool _isDocumentSaved = false;
         private bool _isExistingDocumentLoaded = false;
 
@@ -22,7 +22,7 @@ namespace MyNotepad
         public string LoadedFilePath { get => _loadedFilePath; set => _loadedFilePath = value; }
         public bool IsDocumentChanged { get => _isDocumentChanged; set => _isDocumentChanged = value; }
         public bool IsDocumentSaved { get => _isDocumentSaved; set => _isDocumentSaved = value; }
-        public string Title { get => _documentTitle; set => _documentTitle = value; }
+        public string Title { get => _title; set => _title = value; }
         public bool IsExistingDocumentLoaded { get => _isExistingDocumentLoaded; set => _isExistingDocumentLoaded = value; }
 
         public Document(Font font) { _font = font; }

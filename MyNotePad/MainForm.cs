@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO;
-using System.Drawing.Printing;
 using System.Diagnostics;
-using PdfSharp;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MyNotepad
 {
@@ -374,7 +365,7 @@ namespace MyNotepad
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
