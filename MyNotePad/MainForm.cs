@@ -434,21 +434,14 @@ namespace MyNotepad
                     if (document.IsDocumentSaved)
                     {
                         e.Cancel = false;
-                        Application.Exit();
                     }
                 }
                 else if (UserChoice.Equals(DialogResult.No))
                 {
                     e.Cancel = false;
-                    Application.Exit();
                 }
                 else
-                    e.Cancel = true;
-            }
-            else
-            {
-                e.Cancel = false;
-                Application.Exit();
+                    e.Cancel = true; //User clicked either cancel or close button
             }
         }
 
