@@ -39,7 +39,7 @@ namespace MyNotepad
                         else
                             document.SaveAsPDF(saveFileDialog.FileName, noteTextBox.Lines);
 
-                        document.IsDocumentSaved = true;
+                        UpdateFormTitle();
                     }
                     else
                         document.IsDocumentSaved = false;
@@ -66,8 +66,7 @@ namespace MyNotepad
             else
             {
                 document.SaveAsText(document.LoadedFilePath, noteTextBox.Text);
-                document.IsDocumentSaved = true;
-                document.IsDocumentChanged = false;
+                
                 this.Text = this.Text.Replace('*', ' ');
             }
         }
@@ -409,18 +408,22 @@ namespace MyNotepad
 
         private void LineIndicatorListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            noteTextBox.HideSelection = false;
-            if (noteTextBox.Lines.Length > 0)
+            try
             {
-                noteTextBox.SelectionStart = noteTextBox.GetFirstCharIndexFromLine(lineIndicatorListBox.SelectedIndex);
-                noteTextBox.SelectionLength = noteTextBox.Lines[lineIndicatorListBox.SelectedIndex].Length;
-                noteTextBox.ScrollToCaret();
+                noteTextBox.HideSelection = false;
+                if (noteTextBox.Lines.Length > 0)
+                {
+                    noteTextBox.SelectionStart = noteTextBox.GetFirstCharIndexFromLine(lineIndicatorListBox.SelectedIndex);
+                    noteTextBox.SelectionLength = noteTextBox.Lines[lineIndicatorListBox.SelectedIndex].Length;
+                    noteTextBox.ScrollToCaret();
+                }
             }
+            catch { }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (document.IsDocumentChanged)
+            if (document.IsDocumentChanged && e.CloseReason.Equals(CloseReason.UserClosing))
             {
                 DialogResult UserChoice = MessageBox.Show("Do you want to save changes to current document?", Application.ProductName, MessageBoxButtons.YesNoCancel);
 

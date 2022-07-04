@@ -50,11 +50,15 @@ namespace MyNotepad
             }
 
             pdf.Save(fileName);
+            this.IsDocumentSaved = true;
+            this.IsDocumentChanged = false;
         }
 
         public void SaveAsText(string fileName, string content)
         {
             File.WriteAllText(fileName, content);
+            this.IsDocumentSaved = true;
+            this.IsDocumentChanged = false;
         }
         public string Load(string filePath)
         {
