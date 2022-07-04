@@ -54,6 +54,12 @@ namespace MyNotepad
 
         private void ExitMenu_Click(object sender, EventArgs e)
         {
+            //if (document.IsDocumentChanged)
+            //{
+            //    FormClosingEventArgs formClosingEventArgs = new FormClosingEventArgs(CloseReason.UserClosing, false);
+            //    MainForm_FormClosing(sender, formClosingEventArgs);
+            //}
+            //else
             Application.Exit();
         }
 
@@ -66,7 +72,7 @@ namespace MyNotepad
             else
             {
                 document.SaveAsText(document.LoadedFilePath, noteTextBox.Text);
-                
+
                 this.Text = this.Text.Replace('*', ' ');
             }
         }
@@ -341,7 +347,6 @@ namespace MyNotepad
         private void NoteTextBox_TextChanged(object sender, EventArgs e)
         {
             document.IsDocumentChanged = true;
-            //this.Text = document.Title + "* - " + Application.ProductName;
             UpdateFormTitle();
             UpdateLineIndicatorListBox();
         }
@@ -429,12 +434,9 @@ namespace MyNotepad
 
                 if (UserChoice.Equals(DialogResult.Yes))
                 {
-                    e.Cancel = true;
                     SaveAsMenu_Click(sender, e);
-                    if (document.IsDocumentSaved)
-                    {
-                        e.Cancel = false;
-                    }
+
+                    if (document.IsDocumentSaved) { e.Cancel = false; }
                 }
                 else if (UserChoice.Equals(DialogResult.No))
                 {
