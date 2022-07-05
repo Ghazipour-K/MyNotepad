@@ -47,6 +47,9 @@ namespace MyNotepad
             _isChanged = false;
         }
 
+        ///<summary>
+        ///Saves the document is PDF file format.
+        ///</summary>
         protected void SaveAsPDF(string fileName, string[] content)
         {
             int yPoint = 0;
@@ -69,6 +72,9 @@ namespace MyNotepad
             pdf.Save(fileName);
         }
 
+        ///<summary>
+        ///Saves the document is TXT file format.
+        ///</summary>
         protected void SaveAsText(string fileName, string[] content)
         {
             string temp = string.Empty;
