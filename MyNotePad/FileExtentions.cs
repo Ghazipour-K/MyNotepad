@@ -1,6 +1,6 @@
 ﻿namespace MyNotepad
 {
-    enum FileExtentions
+    public enum FileType
     {
         TXT = 1,
         PDF = 2,

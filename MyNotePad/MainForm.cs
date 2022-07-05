@@ -9,11 +9,11 @@ namespace MyNotepad
 {
     public partial class MainForm : Form
     {
-        private PrintDocument printDocument = new PrintDocument();
-        private PrintDialog printDialog = new PrintDialog();
-        private PageSetupDialog pageSetupDialog = new PageSetupDialog();
-        private FontDialog fontDialog = new FontDialog();
-        private Document document = new Document(DefaultFont);
+        private readonly PrintDocument printDocument = new PrintDocument();
+        private readonly PrintDialog printDialog = new PrintDialog();
+        private readonly PageSetupDialog pageSetupDialog = new PageSetupDialog();
+        private readonly FontDialog fontDialog = new FontDialog();
+        private readonly Document document = new Document(DefaultFont);
 
         public MainForm()
         {
@@ -34,21 +34,25 @@ namespace MyNotepad
 
                     if (saveFileDialog.ShowDialog().Equals(DialogResult.OK))
                     {
-                        if (saveFileDialog.FilterIndex.Equals(FileExtentions.TXT) || saveFileDialog.FilterIndex.Equals(FileExtentions.AllFiles))
-                            document.SaveAsText(saveFileDialog.FileName, noteTextBox.Text);
+                        if (saveFileDialog.FilterIndex.Equals(((int)FileType.TXT)) || saveFileDialog.FilterIndex.Equals(((int)FileType.AllFiles)))
+                        {
+                            document.Save(saveFileDialog.FileName, noteTextBox.Lines, FileType.AllFiles);
+                        }
                         else
-                            document.SaveAsPDF(saveFileDialog.FileName, noteTextBox.Lines);
+                        {
+                            document.Save(saveFileDialog.FileName, noteTextBox.Lines, FileType.PDF);
+                        }
 
                         UpdateFormTitle();
                     }
                     else
-                        document.IsDocumentSaved = false;
+                        document.IsSaved = false;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-                document.IsDocumentSaved = false;
+                document.IsSaved = false;
             }
         }
 
@@ -71,7 +75,7 @@ namespace MyNotepad
             }
             else
             {
-                document.SaveAsText(document.LoadedFilePath, noteTextBox.Text);
+                document.Save(document.LoadedFilePath, noteTextBox.Lines, FileType.AllFiles);
 
                 this.Text = this.Text.Replace('*', ' ');
             }
@@ -88,7 +92,7 @@ namespace MyNotepad
                     if (File.Exists(openFileDialog.FileName))
                     {
                         noteTextBox.Text = document.Load(openFileDialog.FileName);
-                        document.IsDocumentChanged = false;
+                        document.IsChanged = false;
                         document.Title = openFileDialog.SafeFileName;
                         this.Text = document.Title + " - " + Application.ProductName;
                         document.LoadedFilePath = openFileDialog.FileName;
@@ -291,7 +295,7 @@ namespace MyNotepad
                     if (FileNames.Length > 0)
                     {
                         noteTextBox.Text = File.ReadAllText(FileNames[0]);
-                        document.IsDocumentChanged = false;
+                        document.IsChanged = false;
                         document.LoadedFilePath = FileNames[0];
                         string[] SplitedFilePath = FileNames[0].Split('\\');
                         document.Title = FileNames[0].Split('\\')[SplitedFilePath.Length - 1];//Safe file name
@@ -346,47 +350,45 @@ namespace MyNotepad
 
         private void NoteTextBox_TextChanged(object sender, EventArgs e)
         {
-            document.IsDocumentChanged = true;
+            document.IsChanged = true;
             UpdateFormTitle();
             UpdateLineIndicatorListBox();
         }
 
         private void NewDocumentMenu_Click(object sender, EventArgs e)
         {
-            if (document.IsDocumentChanged)
+            if (document.IsChanged)
             {
-                DialogResult UserChoice = MessageBox.Show("Do you want to save changes to current document?", Application.ProductName, MessageBoxButtons.YesNo);
+                string message = "Do you want to save changes to current document?";
+                DialogResult UserChoice = MessageBox.Show(message, Application.ProductName, MessageBoxButtons.YesNo);
 
                 if (UserChoice.Equals(DialogResult.Yes))
                 {
                     SaveMenu_Click(sender, e);
-                    document.IsDocumentChanged = false;
-                    document.Title = "Untitled";
-                    UpdateFormTitle();
-                }
-                else
-                {
-                    noteTextBox.Text = string.Empty;
-                    document.IsDocumentChanged = false;
-                    document.Title = "Untitled";
-                    UpdateFormTitle();
+                    if (document.IsSaved) //Check if user saved the document sucessfully or not
+                    {
+                        noteTextBox.Text = string.Empty;
+                        document.IsChanged = false;
+                        document.ResetTitle();
+                        UpdateFormTitle();
+                    }
                 }
             }
             else
             {
                 noteTextBox.Text = string.Empty;
-                document.IsDocumentChanged = false;
-                document.Title = "Untitled";
+                document.IsChanged = false;
+                document.ResetTitle();
                 UpdateFormTitle();
             }
         }
 
         private void UpdateFormTitle()
         {
-            if (document.IsDocumentChanged)
-                this.Text = document.Title + "* - " + Application.ProductName;
+            if (document.IsChanged)
+                Text = document.Title + "* - " + Application.ProductName;
             else
-                this.Text = document.Title + " - " + Application.ProductName;
+                Text = document.Title + " - " + Application.ProductName;
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
@@ -428,7 +430,7 @@ namespace MyNotepad
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (document.IsDocumentChanged && e.CloseReason.Equals(CloseReason.UserClosing))
+            if (document.IsChanged && e.CloseReason.Equals(CloseReason.UserClosing))
             {
                 DialogResult UserChoice = MessageBox.Show("Do you want to save changes to current document?", Application.ProductName, MessageBoxButtons.YesNoCancel);
 
@@ -436,7 +438,7 @@ namespace MyNotepad
                 {
                     SaveAsMenu_Click(sender, e);
 
-                    if (document.IsDocumentSaved) { e.Cancel = false; }
+                    if (document.IsSaved) { e.Cancel = false; }
                 }
                 else if (UserChoice.Equals(DialogResult.No))
                 {

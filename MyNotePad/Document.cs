@@ -12,14 +12,14 @@ namespace MyNotepad
     {
         private Font _font = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Regular);
         private string _loadedFilePath = string.Empty;
-        private bool _isDocumentChanged = false;
+        private bool _isChanged = false;
         private string _title = "Untitled";
-        private bool _isDocumentSaved = false;
+        private bool _isSaved = false;
         private bool isDisposed;
 
         public string LoadedFilePath { get => _loadedFilePath; set => _loadedFilePath = value; }
-        public bool IsDocumentChanged { get => _isDocumentChanged; set => _isDocumentChanged = value; }
-        public bool IsDocumentSaved { get => _isDocumentSaved; set => _isDocumentSaved = value; }
+        public bool IsChanged { get => _isChanged; set => _isChanged = value; }
+        public  bool IsSaved { get => _isSaved; }
         public string Title { get => _title; set => _title = value; }
         public Font Font { get => _font; set => _font = value; }
 
@@ -28,11 +28,28 @@ namespace MyNotepad
 
         ~Document() { Dispose(false); }
 
-        public void SaveAsPDF(string fileName, string[] content)
-        {
-            string line = null;
-            int yPoint = 0;
+        ///<summary>
+        ///Sets the document title to "Untitled".
+        ///</summary>
+        public void ResetTitle() { _title = "Untitled"; }
 
+        ///<summary>
+        ///Saves the provided content in desired file format.
+        ///</summary>
+        public void Save(string fileName, string[] content, FileType fileType)
+        {
+            if (fileType.Equals(FileType.PDF))
+                SaveAsPDF(fileName, content);
+            else
+                SaveAsText(fileName, content);
+
+            _isSaved = true;
+            _isChanged = false;
+        }
+
+        protected void SaveAsPDF(string fileName, string[] content)
+        {
+            int yPoint = 0;
             PdfDocument pdf = new PdfDocument();
             pdf.PageLayout = PdfPageLayout.SinglePage;
             pdf.Info.Title = "TXT to PDF";
@@ -44,27 +61,38 @@ namespace MyNotepad
 
             for (int i = 0; i < content.Length; i++)
             {
-                line = content[i];
+                string line = content[i];
                 graph.DrawString(line, font, XBrushes.Black, new XRect(40, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
                 yPoint += 40;
             }
 
             pdf.Save(fileName);
-            this.IsDocumentSaved = true;
-            this.IsDocumentChanged = false;
         }
 
-        public void SaveAsText(string fileName, string content)
+        protected void SaveAsText(string fileName, string[] content)
         {
-            File.WriteAllText(fileName, content);
-            this.IsDocumentSaved = true;
-            this.IsDocumentChanged = false;
+            string temp = string.Empty;
+
+            foreach (string line in content)
+            {
+                temp += line + Environment.NewLine;
+            }
+
+            if (content.Length > 0) temp = temp.Remove(temp.LastIndexOf(Environment.NewLine)); //Removing the last redundant newline if any
+            File.WriteAllText(fileName, temp);
         }
+
+        ///<summary>
+        ///Loads content of specified file.
+        ///</summary>
         public string Load(string filePath)
         {
             return File.ReadAllText(filePath);
         }
 
+        ///<summary>
+        ///Gets online content asynchronously.
+        ///</summary>
         public async Task<string> LoadURL(string URL)
         {
             WebClient client = new WebClient();
@@ -85,7 +113,7 @@ namespace MyNotepad
             if (disposing)
             {
                 // free managed resources
-                this.Dispose();
+                Dispose();
             }
 
             isDisposed = true;
